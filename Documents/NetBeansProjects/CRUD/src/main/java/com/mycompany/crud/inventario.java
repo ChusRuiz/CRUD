@@ -6,10 +6,16 @@ package com.mycompany.crud;
 
 import com.mycompany.crud.MySqlConnector;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyEvent;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,6 +39,70 @@ public class inventario extends javax.swing.JFrame {
         jTextField3.setText("");
         jTextField4.setText("");  
         jTextField5.setText("");
+    }
+    private void eliminarPersona(){
+        try{
+            String delete = "DELETE FROM `purchase` WHERE id = ?";
+            int fila = jTable1.getSelectedRow();
+            String id = jTable1.getValueAt(fila, 0).toString();
+            PreparedStatement pst = conexion.prepareStatement(delete);
+            pst.setString(1, id);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Eliminado con exito");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al eliminar");
+        }
+    }
+    private void guardarPersona(){ 
+        try{
+            Producto nuevapersona = new Producto();
+            nuevapersona.setNombre(jTextField3.getText().toString());
+            nuevapersona.setApellido(jTextField5.getText().toString());
+            nuevapersona.setDireccion(jTextField4.getText().toString());
+            nuevapersona.setTelefono(jTextField2.getText().toString());
+            String insert = "INSERT INTO `purchase` ( `Nombre`, `Apellido`, `Direccion`, `telefono`)     "
+                    + "VALUES ( ?, ?, ?, ?)";
+            PreparedStatement pst = conexion.prepareStatement(insert);
+            pst.setString(1, nuevapersona.getNombre());
+            pst.setString(2, nuevapersona.getApellido());
+            pst.setString(3, nuevapersona.getDireccion());
+            pst.setString(4, nuevapersona.getTelefono());
+            
+            pst.execute();
+            
+            JOptionPane.showMessageDialog(null, "Guardado con exito");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
+    }
+    private void modificarPersona(){ 
+        try{
+            Producto nuevapersona = new Producto();
+            nuevapersona.setNombre(jTextField3.getText().toString());
+            nuevapersona.setApellido(jTextField5.getText().toString());
+            nuevapersona.setDireccion(jTextField4.getText().toString());
+            nuevapersona.setTelefono(jTextField2.getText().toString());
+            int fila = jTable1.getSelectedRow();
+            String id = jTable1.getValueAt(fila, 0).toString();
+            String insert = "UPDATE `purchase` SET "
+                +"NOMBRE = ?, " 
+                +"APELLIDO = ?, "
+                +"DIRECCION = ?, "
+                +"TELEFONO = ? " 
+                +"WHERE ID = ?";
+            PreparedStatement pst = conexion.prepareStatement(insert);
+            pst.setString(1, nuevapersona.getNombre());
+            pst.setString(2, nuevapersona.getApellido());
+            pst.setString(3, nuevapersona.getDireccion());
+            pst.setString(4, nuevapersona.getTelefono());
+            pst.setString(5, id);
+            
+            pst.execute();
+            
+            JOptionPane.showMessageDialog(null, "Modificado con exito");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
     }
     private void mostraDatos(){
         try{
@@ -99,6 +169,11 @@ public class inventario extends javax.swing.JFrame {
 
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 49, 496, 520));
@@ -115,10 +190,20 @@ public class inventario extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         jButton2.setText("Modificar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 400, 110, 30));
 
         jButton3.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         jButton3.setText("Eliminar ");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 400, 110, 30));
 
         jLabel2.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -131,6 +216,11 @@ public class inventario extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         jButton4.setText("Agregar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, 90, 30));
 
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -213,6 +303,30 @@ public class inventario extends javax.swing.JFrame {
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        guardarPersona();
+        mostraDatos();
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int fila = jTable1.rowAtPoint(evt.getPoint());
+        jTextField3.setText (jTable1.getValueAt(fila, 1).toString());
+        jTextField5.setText(jTable1.getValueAt(fila, 2).toString());
+        jTextField4.setText(jTable1.getValueAt(fila, 3).toString());
+        jTextField2.setText(jTable1.getValueAt(fila, 4).toString());
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        modificarPersona();
+        mostraDatos();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        eliminarPersona();
+        mostraDatos();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
