@@ -23,31 +23,31 @@ public class Producto {
         this.Id = id;
     }
     
-    public String getProduct(){
+    public String getNombre(){
         return Nombre;
     }
-    public void setProduct(String Nombre){
+    public void setNombre(String Nombre){
         this.Nombre = Nombre;
     }
     
-    public String getuom(){
+    public String getApellido(){
         return Apellido;
     }
-    public void setuom(String Apellido){
+    public void setApellido(String Apellido){
         this.Apellido = Apellido;
     }
     
-    public String getquantity() {
+    public String getDireccion() {
         return Direccion;
     }
-    public void setquantity(String direccion) {
+    public void setDireccion(String direccion) {
         this.Direccion = direccion;
     }
     
-    public String getprice() {
+    public String getTelefono() {
         return Telefono;
     }
-    public void setprice(String telefono) {
+    public void setTelefono(String telefono) {
         this.Telefono = telefono;
     }
     
