@@ -5,12 +5,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 
-
-public class Conector {
+public class MySqlConnector {
     Connection con = null;
     
     public Connection conectar(){
-        String db = "jdbc:mysql://localhost/compras";
+        String db = "jdbc:mysql://localhost/crud";
         String usuario = "root";
         String pass = "";
         
